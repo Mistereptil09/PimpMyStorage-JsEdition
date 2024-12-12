@@ -11,11 +11,13 @@ model category {
   id                 Int       @id @default(autoincrement())
   name               String    @db.VarChar(45)
   parent_category_id Int?
+  parent_category    category? @relation("CategoryToSubcategory", fields: [parent_category_id], references: [id])
+  subcategories      category[] @relation("CategoryToSubcategory")
   product            product[]
 }
 
 model doctrine_migration_versions {
-  version        String    @id
+  version        String    @id @db.VarChar(191)
   executed_at    DateTime? @db.DateTime(0)
   execution_time Int?
 }
