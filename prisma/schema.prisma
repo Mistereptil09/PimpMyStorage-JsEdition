@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model category {
+  id                 Int       @id @default(autoincrement())
+  name               String    @db.VarChar(45)
+  parent_category_id Int?
+  product            product[]
+}
+
+model doctrine_migration_versions {
+  version        String    @id
+  executed_at    DateTime? @db.DateTime(0)
+  execution_time Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model messenger_messages {
+  id           BigInt    @id @default(autoincrement())
+  body         String    @db.LongText
+  headers      String    @db.LongText
+  queue_name   String    @db.VarChar(190)
+  created_at   DateTime  @db.DateTime(0)
+  available_at DateTime  @db.DateTime(0)
+  delivered_at DateTime? @db.DateTime(0)
+
+  @@index([delivered_at], map: "IDX_75EA56E016BA31DB")
+  @@index([available_at], map: "IDX_75EA56E0E3BD61CE")
+  @@index([queue_name], map: "IDX_75EA56E0FB7336F0")
+}
+
+model product {
+  id                         Int                          @id @default(autoincrement())
+  category_id                Int
+  name                       String                       @db.VarChar(45)
+  description                String                       @db.VarChar(255)
+  price                      Float
+  quantity                   Int
+  category                   category                     @relation(fields: [category_id], references: [id], onUpdate: Restrict, map: "FK_D34A04AD12469DE2")
+  stock_movement_has_product stock_movement_has_product[]
+
+  @@index([category_id], map: "IDX_D34A04AD12469DE2")
+}
+
+model stock_movement {
+  id                         Int                          @id @default(autoincrement())
+  quantity                   Int
+  date                       DateTime                     @db.Date
+  reason                     String                       @db.VarChar(255)
+  movement_type              String                       @db.VarChar(255)
+  user_id                    Int?
+  user                       user?                        @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_BB1BC1B5A76ED395")
+  stock_movement_has_product stock_movement_has_product[]
+
+  @@index([user_id], map: "IDX_BB1BC1B5A76ED395")
+}
+
+model stock_movement_has_product {
+  id                Int             @id @default(autoincrement())
+  product_id        Int?
+  stock_movement_id Int?
+  product           product?        @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_731327934584665A")
+  stock_movement    stock_movement? @relation(fields: [stock_movement_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_73132793FD50D693")
+
+  @@index([product_id], map: "IDX_731327934584665A")
+  @@index([stock_movement_id], map: "IDX_73132793FD50D693")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user {
+  id             Int              @id @default(autoincrement())
+  email          String           @unique(map: "UNIQ_8D93D649E7927C74") @db.VarChar(180)
+  roles          String           @db.LongText
+  password       String           @db.VarChar(255)
+  stock_movement stock_movement[]
+}
