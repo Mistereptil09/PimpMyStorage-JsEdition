@@ -5,8 +5,8 @@ import HomeView from "../components/index_page/HomeView";
 import TableShow from "../components/TableShow";
 import Login from "../components/Login";
 import Register from "../components/Register";
-//import StockManager from "../components/stock_manager/StockManager";
-//import StockMovements from "../components/stock_movements/StockMovements";
+import StockManager from "../components/StockManager";
+import StockMovements from "../components/StockMovements";
 import { useAuth, AuthProvider } from "../context/AuthContext"; // Assuming you have an AuthProvider
 
 const AppContent: React.FC = () => {
@@ -82,18 +82,29 @@ const AppContent: React.FC = () => {
         <div>
           <h1>Show Table Show</h1>
           <TableShow apiLink="/api/products" />
-        </div> 
+        </div>
       )}
 
       {view === "category" && (
         <div>
           <h1>Show Table Show</h1>
           <TableShow apiLink="/api/categories" />
-        </div> 
+        </div>
       )}
 
-      {/*view === "stock" && <StockManager />}
-      {view === "movements" && <StockMovements />*/}
+      {view === "stock" && (
+        <div>
+          <h1>Manage Stock</h1>
+          <StockManager />
+        </div>
+      )}
+
+      {view === "movements" && (
+        <div>
+          <h1>Stock Movements</h1>
+          <StockMovements />
+        </div>
+      )}
     </main>
   );
 };
