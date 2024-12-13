@@ -13,3 +13,30 @@ export async function GET() {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const data = await request.json();
+    const newCategory = await prisma.category.create({
+      data: {
+        name: data.name,
+      },
+    });
+    return NextResponse.json(newCategory, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const data = await request.json();
+    const updatedCategory = await prisma.category.update({
+      where: { id: data.id },
+      data: { name: data.name },
+    });
+    return NextResponse.json(updatedCategory);
+  } catch (error) {
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
