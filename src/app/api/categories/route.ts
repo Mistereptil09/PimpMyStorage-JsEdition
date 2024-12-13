@@ -22,13 +22,12 @@ export async function POST(request: Request) {
       throw new TypeError('The "payload" argument must be of type object. Received null');
     }
 
-    // Log the payload value
     console.log('POST data:', data);
 
     const newCategory = await prisma.category.create({
       data: {
         name: data.name,
-        parent_category_id: parseInt(data.parent_category_id, 10), // Ensure parent_category_id is an integer
+        parent_category_id: parseInt(data.parent_category_id, 10), 
       },
     });
     return NextResponse.json(newCategory, { status: 201 });
@@ -66,20 +65,51 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    console.log("DELETE request received:", request.url);
+
+    // Parse the URL to get the query parameters
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
     if (!id) {
+      console.error("Missing ID in DELETE request");
       return NextResponse.json({ error: "Missing category ID" }, { status: 400 });
     }
 
-    const deletedCategory = await prisma.category.delete({
-      where: { id: parseInt(id, 10) },
+    // Convert the ID to an integer and validate it
+    const parsedId = parseInt(id, 10);
+    if (isNaN(parsedId)) {
+      console.error("Invalid ID provided:", id);
+      return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
+    }
+
+    console.log("Parsed ID:", parsedId);
+
+    // Check if the category exists before deleting
+    const categoryToDelete = await prisma.category.findUnique({
+      where: { id: parsedId },
     });
 
-    return NextResponse.json(deletedCategory, { status: 200 });
+    if (!categoryToDelete) {
+      console.error("No category found with ID:", parsedId);
+      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    }
+
+    console.log("Category to delete:", categoryToDelete);
+
+    // Delete the category
+    const deletedCategory = await prisma.category.delete({
+      where: { id: parsedId },
+    });
+
+    console.log("Deleted category:", deletedCategory);
+
+    return NextResponse.json(
+      { message: "Category deleted successfully", deletedCategory },
+      { status: 200 }
+    );
   } catch (error) {
-    console.log(error);
+    console.error("Error in DELETE handler:", error);
     const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }

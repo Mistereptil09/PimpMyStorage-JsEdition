@@ -66,15 +66,21 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
   };
 
   const handleDelete = async (rowId: number) => {
+    console.log("Attempting to delete:", rowId);
+  
     try {
       const response = await fetch(`${apiLink}?id=${rowId}`, {
         method: "DELETE",
       });
+      console.log("Request URL:", `${apiLink}?id=${rowId}`);
+      console.log("Response status:", response.status);
+  
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Response body:", errorText);
         throw new Error("Failed to delete the entry.");
       }
-
-      // Remove the deleted item from the data array
+  
       setData((prevData) => prevData.filter((item) => item.id !== rowId));
     } catch (error) {
       console.error("Error deleting entry:", error);
@@ -85,6 +91,7 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
       }
     }
   };
+  
 
   const exportToCSV = () => {
     const csvRows: string[] = [];
