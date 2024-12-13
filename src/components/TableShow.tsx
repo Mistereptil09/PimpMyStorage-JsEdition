@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import EditRow from './EditRow';
+import DeleteRow from './DeleteRow';
 
 interface TableShowProps {
   apiLink: string;
@@ -88,26 +89,37 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
-          editIndex === index ? (
-            <EditRow
-              key={index}
-              item={item}
-              columns={columns}
-              apiLink={apiLink}
-              onSave={handleSave}
-            />
-          ) : (
-            <tr key={index}>
-              {columns.map((column) => (
-                <td key={column}>{item[column]}</td>
-              ))}
-              <td>
-                <button onClick={() => handleEdit(index)}>Edit</button>
-              </td>
-            </tr>
-          )
-        ))}
+        {data.map((item, index) => {
+          if (editIndex === index) {
+            return (
+              <EditRow
+                key={index}
+                item={item}
+                columns={columns}
+                apiLink={apiLink}
+                onSave={handleSave}
+              />
+            );
+          } else {
+            return (
+              <tr key={index}>
+                {columns.map((column) => (
+                  <td key={column}>{item[column]}</td>
+                ))}
+                <td>
+                  <button onClick={() => handleEdit(index)}>Edit</button>
+                  {/*<DeleteRow
+                    rowId={index}
+                    apiLink={apiLink}
+                    data={data}
+                    setData={setData}
+                    setError={setError}
+                  />*/}
+                </td>
+              </tr>
+            );
+          }
+        })}
       </tbody>
     </table>
   );

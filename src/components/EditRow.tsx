@@ -24,6 +24,7 @@ const EditRow: React.FC<EditRowProps> = ({ item, columns, apiLink, onSave }) => 
         },
         body: JSON.stringify(formData),
       });
+      console.log(formData)
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
