@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+
 export async function GET() {
   try {
     const stockMovements = await prisma.stock_movement.findMany({
@@ -15,12 +16,14 @@ export async function GET() {
         date: "desc",
       },
     });
+
     return NextResponse.json(stockMovements);
   } catch (error) {
     console.error("Error fetching stock movements:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
 export async function POST(request: Request) {
     try {
       const changes = await request.json();
