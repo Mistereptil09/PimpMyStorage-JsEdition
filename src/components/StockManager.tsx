@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 type Product = {
@@ -7,11 +6,9 @@ type Product = {
   name: string;
   quantity: number;
 };
-
 export default function StockManager() {
   const [products, setProducts] = useState<Product[]>([]);
   const [changes, setChanges] = useState<Record<number, { action: string; value: number }>>({});
-
   const fetchProducts = async () => {
     try {
       const response = await fetch("/api/products");
@@ -68,7 +65,6 @@ export default function StockManager() {
     }
   };
   
-
   return (
     <div className="w-full max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Stock Management</h1>

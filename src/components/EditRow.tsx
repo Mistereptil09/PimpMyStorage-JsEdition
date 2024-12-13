@@ -24,6 +24,7 @@ const EditRow: React.FC<EditRowProps> = ({ item, columns, apiLink, onSave }) => 
         },
         body: JSON.stringify(formData),
       });
+      console.log(formData)
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -40,18 +41,21 @@ const EditRow: React.FC<EditRowProps> = ({ item, columns, apiLink, onSave }) => 
   return (
     <tr>
       {columns.map((column) => (
-        <td key={column}>
+        <td key={column} className="p-2 border">
           <input
             type="text"
             name={column}
             value={formData[column]}
             onChange={handleChange}
+            className="border rounded p-1 w-full"
           />
         </td>
       ))}
-      <td>
-        <button onClick={handleSave}>Save</button>
-        {error && <div>Error: {error}</div>}
+      <td className="p-2 border">
+        <button onClick={handleSave} className="bg-blue-500 text-white px-2 py-1 rounded">
+          Save
+        </button>
+        {error && <div className="text-red-500 mt-2">Error: {error}</div>}
       </td>
     </tr>
   );

@@ -3,19 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #f9fafb;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --accent: #6635a4;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Example usage of the accent color */
+a {
+  color: var(--accent);
+}
+
+button {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+input {
+  border: 1px solid var(--accent);
+  color: var(--accent);
 }
