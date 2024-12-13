@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import AddIntoDatabase from './AddIntoDatabase';
 import EditRow from './EditRow';
 import DeleteRow from './DeleteRow';
 
@@ -79,49 +80,52 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
   const columns = Object.keys(data[0]);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((column) => (
-            <th key={column}>{column}</th>
-          ))}
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => {
-          if (editIndex === index) {
-            return (
-              <EditRow
-                key={index}
-                item={item}
-                columns={columns}
-                apiLink={apiLink}
-                onSave={handleSave}
-              />
-            );
-          } else {
-            return (
-              <tr key={index}>
-                {columns.map((column) => (
-                  <td key={column}>{item[column]}</td>
-                ))}
-                <td>
-                  <button onClick={() => handleEdit(index)}>Edit</button>
-                  {/*<DeleteRow
-                    rowId={index}
-                    apiLink={apiLink}
-                    data={data}
-                    setData={setData}
-                    setError={setError}
-                  />*/}
-                </td>
-              </tr>
-            );
-          }
-        })}
-      </tbody>
-    </table>
+    <div>
+      <AddIntoDatabase apiLink={apiLink}/>
+      <table>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column}>{column}</th>
+            ))}
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => {
+            if (editIndex === index) {
+              return (
+                <EditRow
+                  key={index}
+                  item={item}
+                  columns={columns}
+                  apiLink={apiLink}
+                  onSave={handleSave}
+                />
+              );
+            } else {
+              return (
+                <tr key={index}>
+                  {columns.map((column) => (
+                    <td key={column}>{item[column]}</td>
+                  ))}
+                  <td>
+                    <button onClick={() => handleEdit(index)}>Edit</button>
+                    {/*<DeleteRow
+                      rowId={index}
+                      apiLink={apiLink}
+                      data={data}
+                      setData={setData}
+                      setError={setError}
+                    />*/}
+                  </td>
+                </tr>
+              );
+            }
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
