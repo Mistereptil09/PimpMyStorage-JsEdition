@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import AddIntoDatabase from './AddIntoDatabase';
-import EditRow from './EditRow';
-import DeleteRow from './DeleteRow';
+import React, { useState, useEffect } from "react";
+import AddIntoDatabase from "./AddIntoDatabase";
+import EditRow from "./EditRow";
+import DeleteFromDatabase from "./DeleteFromDatabase";
 
 interface TableShowProps {
   apiLink: string;
@@ -20,7 +20,7 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
       try {
         const response = await fetch(apiLink);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const result = await response.json();
         setData(result);
@@ -49,7 +49,7 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
       try {
         const response = await fetch(apiLink);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const result = await response.json();
         setData(result);
@@ -81,7 +81,7 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
 
   return (
     <div>
-      <AddIntoDatabase apiLink={apiLink}/>
+      <AddIntoDatabase apiLink={apiLink} />
       <table>
         <thead>
           <tr>
@@ -111,13 +111,13 @@ const TableShow: React.FC<TableShowProps> = ({ apiLink }) => {
                   ))}
                   <td>
                     <button onClick={() => handleEdit(index)}>Edit</button>
-                    {/*<DeleteRow
-                      rowId={index}
+                    <DeleteFromDatabase
+                      rowId={item.id}
                       apiLink={apiLink}
                       data={data}
                       setData={setData}
                       setError={setError}
-                    />*/}
+                    />
                   </td>
                 </tr>
               );

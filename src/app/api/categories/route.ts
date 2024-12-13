@@ -63,3 +63,25 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
+
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing category ID" }, { status: 400 });
+    }
+
+    const deletedCategory = await prisma.category.delete({
+      where: { id: parseInt(id, 10) },
+    });
+
+    return NextResponse.json(deletedCategory, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
+}
