@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+
 type Product = {
   id: number;
   name: string;
@@ -20,21 +21,25 @@ export default function StockManager() {
       console.error("Error fetching products:", error);
     }
   };
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
   const handleInputChange = (id: number, value: number) => {
     setChanges((prev) => ({
       ...prev,
       [id]: { ...prev[id], value: isNaN(value) ? 0 : value },
     }));
   };
+
   const handleActionChange = (id: number, action: string) => {
     setChanges((prev) => ({
       ...prev,
       [id]: { ...prev[id], action },
     }));
   };
+
   const handleSaveAll = async () => {
     const modifiedProducts = Object.entries(changes).map(([id, change]) => ({
       id: parseInt(id, 10),

@@ -48,14 +48,18 @@ const AppContent: React.FC = () => {
         >
           Home
         </button>
-        <button 
-          className="mr-2 p-2 bg-blue-500 text-white rounded"
-          onClick={() => setView("product")}
+        <button
+          className={`mr-2 px-4 py-2 rounded ${
+            view === "edit" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setView("edit")}
         >
-          Products
+          Edit Products
         </button>
-        <button 
-          className="mr-2 p-2 bg-blue-500 text-white rounded"
+        <button
+          className={`mr-2 px-4 py-2 rounded ${
+            view === "stock" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
           onClick={() => setView("stock")}
         >
           Manage Stock
@@ -72,6 +76,7 @@ const AppContent: React.FC = () => {
         >
           Category
         </button>
+
       </div>
 
       {/* Render Views */}
@@ -113,7 +118,21 @@ const App: React.FC = () => {
     <AuthProvider>
       <AppContent />
     </AuthProvider>
+          <h1>Show Index Page</h1>
+          <HomeView />
+          <div>
+            <h1>Data Table Category</h1>
+            <TableShow apiLink="/api/categories" />
+          </div>
+          <div>
+            <h1>Data Table Product</h1>
+            <TableShow apiLink="/api/products" />
+          </div>
+        </div>
+      )}
+      {view === "edit" && <EditView />}
+      {view === "stock" && <StockManager />}
+      {view === "movements" && <StockMovements />}
+    </main>
   );
-};
-
-export default App;
+}
