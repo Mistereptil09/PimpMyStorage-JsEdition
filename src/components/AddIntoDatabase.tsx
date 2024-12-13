@@ -101,25 +101,28 @@ const RegisterData: React.FC<RegisterDataProps> = ({ apiLink }) => {
   const columns = Object.keys(data[0]);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="mb-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {columns.filter(column => column !== 'id').map((column) => (
           <div key={column}>
-            <label htmlFor={column}>{column.charAt(0).toUpperCase() + column.slice(1)}:</label>
+            <label htmlFor={column} className="block text-sm font-medium text-gray-700">
+              {column.charAt(0).toUpperCase() + column.slice(1)}:
+            </label>
             <input
               type="text"
               id={column}
               name={column}
               value={formData[column]}
               onChange={handleChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
         ))}
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           {loading ? 'Submitting...' : 'Add to Database'}
         </button>
       </form>
-      {submitError && <div style={{ color: 'red' }}>Error: {submitError}</div>}
+      {submitError && <div className="text-red-500 mt-2">Error: {submitError}</div>}
     </div>
   );
 };

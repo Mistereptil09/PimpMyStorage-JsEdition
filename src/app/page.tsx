@@ -10,60 +10,64 @@ import StockMovements from "../components/StockMovements";
 import { useAuth, AuthProvider } from "../context/AuthContext"; // Assuming you have an AuthProvider
 
 const AppContent: React.FC = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [view, setView] = useState<"home" | "product" | "stock" | "movements" | "category">("home");
+  const [authView, setAuthView] = useState<"login" | "register">("login");
 
   if (!isAuthenticated) {
     return (
-      <div>
-        <Login />
-        <Register />
+      <div className="p-5 bg-gray-100">
+        <div className="mb-5">
+          <button 
+            className="mr-2 p-2 bg-blue-500 text-white rounded"
+            onClick={() => setAuthView("login")}
+          >
+            Login
+          </button>
+          <button 
+            className="p-2 bg-green-500 text-white rounded"
+            onClick={() => setAuthView("register")}
+          >
+            Register
+          </button>
+        </div>
+        {authView === "login" ? <Login /> : <Register />}
       </div>
     );
   }
 
   return (
-    <main className="flex flex-col items-center p-8">
-      <h1 className="text-2xl font-bold mb-4">Product Inventory</h1>
+    <main className="p-5 bg-gray-100">
+      <h1 className="mb-5 text-gray-800">Product Inventory</h1>
 
       {/* View Switcher */}
-      <div className="mb-4">
-        <button
-          className={`mr-2 px-4 py-2 rounded ${
-            view === "home" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+      <div className="mb-5">
+        <button 
+          className="mr-2 p-2 bg-blue-500 text-white rounded"
           onClick={() => setView("home")}
         >
           Home
         </button>
-        <button
-          className={`mr-2 px-4 py-2 rounded ${
-            view === "product" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+        <button 
+          className="mr-2 p-2 bg-blue-500 text-white rounded"
           onClick={() => setView("product")}
         >
           Products
         </button>
-        <button
-          className={`mr-2 px-4 py-2 rounded ${
-            view === "stock" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+        <button 
+          className="mr-2 p-2 bg-blue-500 text-white rounded"
           onClick={() => setView("stock")}
         >
           Manage Stock
         </button>
-        <button
-          className={`px-4 py-2 rounded ${
-            view === "movements" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+        <button 
+          className="mr-2 p-2 bg-blue-500 text-white rounded"
           onClick={() => setView("movements")}
         >
           Stock Movements
         </button>
-        <button
-          className={`mr-2 px-4 py-2 rounded ${
-            view === "category" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+        <button 
+          className="p-2 bg-blue-500 text-white rounded"
           onClick={() => setView("category")}
         >
           Category
@@ -73,35 +77,30 @@ const AppContent: React.FC = () => {
       {/* Render Views */}
       {view === "home" && (
         <div>
-          <h1>Show Index Page</h1>
           <HomeView />
         </div>
       )}
 
       {view === "product" && (
         <div>
-          <h1>Show Table Show</h1>
           <TableShow apiLink="/api/products" />
         </div>
       )}
 
       {view === "category" && (
         <div>
-          <h1>Show Table Show</h1>
           <TableShow apiLink="/api/categories" />
         </div>
       )}
 
       {view === "stock" && (
         <div>
-          <h1>Manage Stock</h1>
           <StockManager />
         </div>
       )}
 
       {view === "movements" && (
         <div>
-          <h1>Stock Movements</h1>
           <StockMovements />
         </div>
       )}

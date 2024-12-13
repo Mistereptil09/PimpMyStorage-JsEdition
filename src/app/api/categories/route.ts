@@ -46,14 +46,13 @@ export async function PUT(request: Request) {
       throw new TypeError('The "payload" argument must be of type object. Received null');
     }
 
-    // Log the payload value
     console.log('PUT data:', data);
 
     const updatedCategory = await prisma.category.update({
       where: { id: data.id },
       data: {
         name: data.name,
-        parent_category_id: parseInt(data.parent_category_id, 10), // Ensure parent_category_id is an integer
+        parent_category_id: parseInt(data.parent_category_id, 10), 
       },
     });
     return NextResponse.json(updatedCategory, { status: 200 });
