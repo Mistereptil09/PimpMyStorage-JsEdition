@@ -43,7 +43,7 @@ export default function HomeView() {
         setCategories(categoriesData);
         setProducts(productsData);
 
-        const lowQuantity = productsData.filter((product) => product.quantity < 5);
+        const lowQuantity: Product[] = productsData.filter((product: Product) => product.quantity < 5);
         setLowQuantityItems(lowQuantity);
       } catch (error) {
         console.error("Error fetching data:", error);
