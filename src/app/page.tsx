@@ -1,13 +1,26 @@
 'use client';
 
 import { useState } from "react";
-import HomeView from "../components//index_page/HomeView";
-//import StockManager from "../components/StockManager";
-//import StockMovements from "../components/StockMovements";
+import HomeView from "../components/index_page/HomeView";
 import TableShow from "../components/TableShow";
+import Login from "../components/Login";
+import Register from "../components/Register";
+//import StockManager from "../components/stock_manager/StockManager";
+//import StockMovements from "../components/stock_movements/StockMovements";
+import { useAuth, AuthProvider } from "../context/AuthContext"; // Assuming you have an AuthProvider
 
-export default function Home() {
+const AppContent: React.FC = () => {
+  const { isAuthenticated, login } = useAuth();
   const [view, setView] = useState<"home" | "product" | "stock" | "movements" | "category">("home");
+
+  if (!isAuthenticated) {
+    return (
+      <div>
+        <Login />
+        <Register />
+      </div>
+    );
+  }
 
   return (
     <main className="flex flex-col items-center p-8">
@@ -47,7 +60,6 @@ export default function Home() {
         >
           Stock Movements
         </button>
-
         <button
           className={`mr-2 px-4 py-2 rounded ${
             view === "category" ? "bg-blue-500 text-white" : "bg-gray-200"
@@ -80,10 +92,18 @@ export default function Home() {
         </div> 
       )}
 
-
-
       {/*view === "stock" && <StockManager />}
       {view === "movements" && <StockMovements />*/}
     </main>
   );
-}
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+};
+
+export default App;
